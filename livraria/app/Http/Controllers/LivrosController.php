@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Auth;
 use Illuminate\Http\Request;
 use App\Models\Livro;
 use App\Models\Genero;
@@ -90,7 +90,9 @@ public function show (Request $request){
 
 
 	return view('livros.show',  ['livro'=>$livro]);
+
 }
+
 public function edit (Request $request){
    $idLivro=$request->id;
    $idEditora=$request->id;
@@ -103,7 +105,7 @@ if(Gate::allows('atualizar-livro',$livro)||Gate::allows('admin')){
    $autoresLivro=[];
    foreach ($livro->autores as $autor) {
       $autoresLivro[]=$autor->id_autor;
-   }
+  } 
 
    $editora=Editora::where('id_editora',$idEditora)->first();
    $editorasLivro=[];
@@ -119,6 +121,22 @@ if(Gate::allows('atualizar-livro',$livro)||Gate::allows('admin')){
       'editoras'=>$editoras
      
 ]);
+
+   if ($request->hasFile('imagem_capa')) {
+     $nomeImagem=$request->file('imagem_capa')->getClientOriginalName();
+     $nomeImagem=time().'_'.$nomeImagem;
+     $guardarImagem=$request->file('imagem_capa')->storeAS('imagens/livros',$nomeImagem);
+
+
+
+     if (!is_null($imagemAntiga)) {
+       Storage::delete('imagens/livros/'. $imagemAntiga);
+     }
+     $atualizarLivro['imagem_capa']=$nomeImagem;
+   }
+
+
+
  }
    else{
     return redirect()->route('livros.index')->with('mensagem','Não tem permissão para aceder á área pretendida');

@@ -45,11 +45,12 @@
 ID:{{Auth::user()->id}}<br>
 Email:{{Auth::user()->email}}<br>
 Nome:{{Auth::user()->name}}<br>
-
+@endif
 @if(Gate::allows('atualizar-livro',$livro)||Gate::allows('admin'))
 <a href="{{route('livros.edit', ['id'=>$livro->id_livro])}}"><h4>Editar</h4></a>
-  @endif 
 <a href="{{route('livros.delete', ['id'=>$livro->id_livro])}}"><h4>Eliminar</h4></a>
+  @endif 
 
-@endif
+
+
 @endsection

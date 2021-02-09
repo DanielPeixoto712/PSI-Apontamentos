@@ -11,7 +11,7 @@ class AutoresController extends Controller
      public function index(){
    	//$autores = Autor::all()->sortbydesc('ida');
 
- 	$autores = Autor::paginate(4);
+ 	$autores = Autor::paginate(14);
 
    	return view('autores.index', ['autores'=>$autores
    ]);
